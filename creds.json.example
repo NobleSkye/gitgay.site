@@ -1,0 +1,9 @@
+# DNSControl credentials template
+# Copy this to creds.json and fill in your actual values
+{
+  "cloudflare": {
+    "TYPE": "CLOUDFLAREAPI",
+    "accountid": "your-cloudflare-account-id",
+    "apitoken": "your-cloudflare-api-token"
+  }
+}

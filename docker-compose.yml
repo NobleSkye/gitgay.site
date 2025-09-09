@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  dnscontrol:
+    build: .
+    environment:
+      - CF_ID=${CF_ACCOUNT_ID}
+      - CF_TOKEN=${CF_API_TOKEN}
+    volumes:
+      - ./dnsconfig.js:/app/dnsconfig.js:ro
+      - ./creds.json:/app/creds.json:ro
+    command: ["dnscontrol", "push"]
+    restart: "no"  # Run once and exit
+
+  # Optional: Web service for managing DNS requests
+  dns-manager:
+    image: node:18-alpine
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - CF_ACCOUNT_ID=${CF_ACCOUNT_ID}
+      - CF_API_TOKEN=${CF_API_TOKEN}
+    command: ["npm", "start"]
+    depends_on:
+      - dnscontrol
